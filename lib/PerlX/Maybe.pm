@@ -88,6 +88,23 @@ sub provided ($$$@)
 	}
 }
 
+sub nonempty ($) {
+    my ($arg) = @_;
+    my $type =
+        Scalar::Util::blessed $arg && $arg->can('_IS_EMPTY') ? 'DUCKY'  :
+	ref $arg 					     ? ref $arg :
+	                				       'PLAIN_VALUE';
+    my $test =
+        $type eq 'PLAIN_VALUE' ? !! $arg :
+        $type eq 'DUCKY'       ? !! $_->_IS_EMPTY() :
+        $type eq 'HASH'        ? !! %$arg :
+        $type eq 'ARRAY'       ? !! %$arg :
+        $type eq 'SCALAR'      ? !! $$arg :
+                                 !! $arg;
+
+    return $test ? $arg : undef;
+}
+
 END_PP
 
 sub provided_deref ($$@)
