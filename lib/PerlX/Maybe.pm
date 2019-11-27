@@ -330,6 +330,29 @@ It not only "just works", it "DWIM"s!
 
 This function is not exported by default.
 
+=item C<< nonempty $value >>
+
+In some cases it can be convenient to check if a value in the check of a
+call to C<provided> or in a call to C<maybe>.
+
+ my $bob = Person->new(
+           unique_id   => $id,
+           name        => $name,
+      maybe phone       => nonempty $tel,
+      maybe address     => nonempty {
+              maybe house_number => $house_number,
+              maybe street       => $street,
+              maybe postal_code  => $postal_code,
+     },
+ );
+
+When deciding if a value is empty we check several things:
+
+If it can be dereferenced as a hash, if the hash is empty, the value is empty.
+If it can be dereferenced as an array, if the array is empty, the value is empty.
+If it can be dereferences as a scalar, if the scalar is undefined, the value is empty.
+Otherwise, we stringify the value and if the length is 0, the value is empty.
+
 =item C<< PerlX::Maybe::IMPLEMENTATION >>
 
 Indicates whether the XS backend L<PerlX::Maybe::XS> was loaded.
