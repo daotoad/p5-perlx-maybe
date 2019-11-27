@@ -90,17 +90,17 @@ sub provided ($$$@)
 
 sub nonempty ($) {
     my ($arg) = @_;
-    my $type =
-        Scalar::Util::blessed $arg && $arg->can('_IS_EMPTY') ? 'DUCKY'  :
-	ref $arg 					     ? ref $arg :
-	                				       'PLAIN_VALUE';
+    my $type
+        = blessed $arg && overload::Method( $arg, '%{}' ) ? 'HASH'
+        : blessed $arg && overload::Method( $arg, '@{}' ) ? 'ARRAY'
+        : blessed $arg && overload::Method( $arg, '${}' ) ? 'SCALAR'
+        :                                                   ref $arg;
+
     my $test =
-        $type eq 'PLAIN_VALUE' ? !! $arg :
-        $type eq 'DUCKY'       ? !! $_->_IS_EMPTY() :
-        $type eq 'HASH'        ? !! %$arg :
-        $type eq 'ARRAY'       ? !! %$arg :
-        $type eq 'SCALAR'      ? !! $$arg :
-                                 !! $arg;
+        : $type eq 'HASH'   ? !!%$arg
+        : $type eq 'ARRAY'  ? !!%$arg
+        : $type eq 'SCALAR' ? defined $$arg
+        :                     length "$arg" > 0;
 
     return $test ? $arg : undef;
 }
