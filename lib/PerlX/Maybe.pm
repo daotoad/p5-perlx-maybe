@@ -353,8 +353,10 @@ When deciding if a value is empty we check several things:
 
 If it can be dereferenced as a hash, if the hash is empty, the value is empty.
 If it can be dereferenced as an array, if the array is empty, the value is empty.
-If it can be dereferences as a scalar, if the scalar is undefined, the value is empty.
-Otherwise, we stringify the value and if the length is 0, the value is empty.
+If it can be dereferenced as a scalar, if the scalar is undefined, the value is empty.
+Otherwise, we stringify the value and if the length of the string is 0, the value is empty.
+
+Note that scalar references and scalars have different rules for emptiness.
 
 =item C<< PerlX::Maybe::IMPLEMENTATION >>
 
@@ -368,7 +370,7 @@ If you install L<PerlX::Maybe::XS>, a faster XS-based implementation will
 be used instead of the pure Perl functions. My basic benchmarking experiments
 seem to show this to be around 30% faster.
 
-Currently there are no XS implementations of the C<provided_deref> and
+Currently there are no XS implementations of the C<nonempty>, C<provided_deref>, and
 C<provided_deref_with_maybe> functions. Contributions welcome.
 
 =head2 Environment
