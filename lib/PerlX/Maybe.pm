@@ -90,11 +90,14 @@ sub provided ($$$@)
 
 sub nonempty ($) {
     my ($arg) = @_;
+    
+    return undef unless defined $arg;
+    
     my $type
         = blessed $arg && overload::Method( $arg, '%{}' ) ? 'HASH'
         : blessed $arg && overload::Method( $arg, '@{}' ) ? 'ARRAY'
         : blessed $arg && overload::Method( $arg, '${}' ) ? 'SCALAR'
-        :                                                   ref $arg;
+        :                                                   ref $arg // '';
 
     my $test =
         : $type eq 'HASH'   ? !!%$arg
