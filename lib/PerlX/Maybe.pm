@@ -9,7 +9,7 @@ BEGIN {
 	our $VERSION   = '1.201';
 	
 	our @EXPORT      = qw/ maybe /;
-	our @EXPORT_OK   = qw/ maybe provided provided_deref provided_deref_with_maybe/;
+	our @EXPORT_OK   = qw/ maybe provided provided_deref provided_deref_with_maybe nonempty/;
 	our %EXPORT_TAGS = (all => \@EXPORT_OK, default => \@EXPORT);
 }
 
